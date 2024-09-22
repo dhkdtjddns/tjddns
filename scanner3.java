@@ -21,7 +21,7 @@ public class scanner3 {
 		int c = k*3000;
 		System.out.print("전체 금액은"+(a+b+c)+"원입니다");
 		
-		
+		 scanner.close();
 		
 	}
 
