@@ -1,0 +1,608 @@
+
+8번
+package s10_1;
+
+class Account {
+	private int money;	//계좌 잔액
+	
+	public Account(int money) {
+		this.money = money;		//초기 설정
+	}
+	
+	//입금 메서드(단일 금액)
+	public void deposit(int rmount) {
+		money += rmount;	//잔액에 금액 더함
+	}
+	
+	//배열로 여러 금액 입금
+	public void deposit(int[] amont) {
+		for(int rmount : amont) {
+			money += rmount;	// 배열에 있는 각 금액을 잔액에 더함
+		}
+	}
+	
+	public int getBalance() {
+		return money;
+	}
+	
+	public int withdraw(int amount) {
+		if(money >= amount) {
+			money -= amount;	//잔액이 충분하면 요청한 금액 인출
+			return amount;	//실제 인출한 금액 반환
+		}else {
+			int temp = money;	//남은 잔액만큼 인출
+			money = 0;	//잔액을 0으로 설정
+			return amount;	//실제 인출한 금액 반환
+		}	
+	}	
+}
+
+public class week8 {
+	public static void main(String[] args) {
+		Account a = new Account(100);	//100원을 예금하면서 계좌 생성
+		a.deposit(5000);	//5000원 예금
+		System.out.println("잔금은 " + a.getBalance() + "원입니다.");
+	
+		int bulk[] = {100, 500 ,200, 700};
+		a.deposit(bulk);	//bulk[] 배열에 있는 모든 돈 예금
+		System.out.println("잔금은 " + a.getBalance() + "원입니다.");
+	
+		int money = 1000;	//인출하고자 한는 금액
+		int wMoney = a.withdraw(money);	//1000원 인출 시도. wMoney는 실제 인출한 금액
+		if (wMoney < money)
+			System.out.println(wMoney + "원만 인출");	// 잔금이 1000원보다 작는 경우
+		else
+			System.out.println(wMoney + "원 인출");	//잔금이 100원보다 큰 경우	
+		
+		System.out.println("잔금은 " + a.getBalance() + "원입니다.");
+	}
+}
+
+9번
+
+package s10_1;
+
+import java.util.Random;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+
+class Player {
+    String name;
+    int score;
+
+    public Player(String name) {
+        this.name = name;
+        this.score = 0;
+    }
+}
+
+class GuessGame {
+    private List<Player> players = new ArrayList<>();
+    private Random random = new Random();
+
+    public void startGame() {
+        Scanner scanner = new Scanner(System.in);
+
+        // 선수 정보 입력
+        System.out.print("게임에 참여할 선수 수를 입력하세요: ");
+        int numPlayers = scanner.nextInt();
+        for (int i = 0; i < numPlayers; i++) {
+            System.out.print("선수 " + (i + 1) + "의 이름을 입력하세요: ");
+            String name = scanner.next();
+            players.add(new Player(name));
+        }
+
+        // 게임 진행
+        while (true) {
+            int targetNumber = random.nextInt(100) + 1; // 1부터 100까지 랜덤 숫자 생성
+            System.out.println("새로운 라운드 시작! 1부터 100 사이의 숫자를 맞춰보세요.");
+
+            for (Player player : players) {
+                System.out.print(player.name + "의 숫자: ");
+                int guess = scanner.nextInt();
+                int diff = Math.abs(targetNumber - guess);
+
+                // 최소 차이값과 해당 선수 저장
+                int minDiff = Integer.MAX_VALUE;
+                Player winner = null;
+                for (Player p : players) {
+                    int currentDiff = Math.abs(targetNumber - p.score);
+                    if (currentDiff < minDiff) {
+                        minDiff = currentDiff;
+                        winner = p;
+                    }
+                }
+
+                // 승자 발표 및 점수 증가
+                System.out.println("정답은 " + targetNumber + "였습니다.");
+                System.out.println(winner.name + "님이 가장 가까워 1점 획득!");
+                winner.score++;
+            }
+
+            // 게임 계속 여부 확인
+            System.out.print("게임을 계속하시겠습니까? (y/n): ");
+            String continueGame = scanner.next();
+            if (!continueGame.equalsIgnoreCase("y")) {
+                break;
+            }
+        }
+
+        // 최종 결과 발표
+        System.out.println("게임 종료!");
+        System.out.println("최종 결과:");
+        for (Player player : players) {
+            System.out.println(player.name + ": " + player.score + "점");
+        }
+
+        // 승자 찾기
+        Player finalWinner = players.get(0);
+        for (int i = 1; i < players.size(); i++) {
+            if (players.get(i).score > finalWinner.score) {
+                finalWinner = players.get(i);
+            }
+        }
+        System.out.println("최종 승자는 " + finalWinner.name + "님입니다! 축하합니다!");
+    }
+}
+
+public class week9 {
+    public static void main(String[] args) {
+        GuessGame game = new GuessGame();
+        game.startGame();
+    }
+}
+
+
+10번
+package s10_1;
+
+import java.util.Scanner;
+
+class DayDiary {
+    int date;
+    String memo;
+
+    public DayDiary(int date) {
+        this.date = date;
+    }
+
+    public void setMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public String getMemo() {
+        return memo;
+    }
+}
+
+class MonthDiary {
+    private DayDiary[] days = new DayDiary[30];
+
+    public MonthDiary(int year, int month) {
+        for (int i = 0; i < days.length; i++) {
+            days[i] = new DayDiary(i + 1);
+        }
+    }
+
+    public void run() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            getMenu();
+            int choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    write(scanner);
+                    break;
+                case 2:
+                    show(scanner);
+                    break;
+                case 3:
+                    showAll();
+                    break;
+                case 4:
+                    System.out.println("프로그램 종료");
+                    return;
+                default:
+                    System.out.println("잘못된 입력입니다.");
+            }
+        }
+    }
+
+    private void getMenu() {
+        System.out.println("1. 메모 작성");
+        System.out.println("2. 특정 날짜 메모 조회");
+        System.out.println("3. 모든 메모 조회");
+        System.out.println("4. 프로그램 종료");
+        System.out.print("메뉴를 선택하세요: ");
+    }
+
+    private void write(Scanner scanner) {
+        System.out.print("날짜(1~30): ");
+        int date = scanner.nextInt() - 1;
+        System.out.print("메모(4글자 이하): ");
+        String memo = scanner.next();
+        if (memo.length() <= 4) {
+            days[date].setMemo(memo);
+            System.out.println("메모가 저장되었습니다.");
+        } else {
+            System.out.println("메모는 4글자 이하로 입력해주세요.");
+        }
+    }
+
+    private void show(Scanner scanner) {
+        System.out.print("조회할 날짜(1~30): ");
+        int date = scanner.nextInt() - 1;
+        String memo = days[date].getMemo();
+        if (memo != null) {
+            System.out.println(date + 1 + "일: " + memo);
+        } else {
+            System.out.println("해당 날짜에 메모가 없습니다.");
+        }
+    }
+
+    private void showAll() {
+        for (int i = 0; i < days.length; i++) {
+            String memo = days[i].getMemo();
+            if (memo != null) {
+                System.out.println((i + 1) + "일: " + memo);
+            }
+        }
+    }
+}
+
+public class week10 {
+    public static void main(String[] args) {
+        MonthDiary monthDiary = new MonthDiary(2024, 10);
+        monthDiary.run();
+    }
+}
+
+11번
+package s10_1;
+
+class ArrayUtil {
+    // 배열 a와 b를 연결한 새로운 배열을 반환하는 메서드
+    public static int[] concat(int[] a, int[] b) {
+        int[] result = new int[a.length + b.length];  // a와 b의 크기를 합친 새로운 배열 생성
+        System.arraycopy(a, 0, result, 0, a.length);  // a 배열의 내용을 result 배열에 복사
+        System.arraycopy(b, 0, result, a.length, b.length);  // b 배열의 내용을 result 배열에 복사
+        return result;  // 새로운 배열 반환
+    }
+
+    // 배열을 출력하는 메서드
+    public static void print(int[] a) {
+        System.out.print("[");
+        for (int i = 0; i < a.length; i++) {
+            System.out.print(a[i]);
+            if (i < a.length - 1) {
+                System.out.print(", ");  // 각 원소 사이에 ", " 추가
+            }
+        }
+        System.out.println("]");  // 배열 출력 후 줄바꿈
+    }
+}
+
+public class week11 {
+    public static void main(String[] args) {
+        int[] array1 = {1, 5, 7, 9};
+        int[] array2 = {3, 6, -1, 100, 77};
+        int[] array3 = ArrayUtil.concat(array1, array2);
+        ArrayUtil.print(array3);
+    }
+}
+
+12번
+package s10_1;
+
+import java.util.Scanner;
+
+class Dictionary {
+    // 한글과 영어 단어 배열
+    private static String[] kor = { "사랑", "아기", "돈", "미래", "희망" };
+    private static String[] eng = { "love", "baby", "money", "future", "hope" };
+
+    // 한글 단어를 입력받아 영어 단어를 반환하는 메서드
+    public static String kor2Eng(String word) {
+        for (int i = 0; i < kor.length; i++) {
+            if (kor[i].equals(word)) {
+                return eng[i];  // 일치하는 한글 단어의 영어 단어 반환
+            }
+        }
+        return "저의 사전에 없습니다.";  // 단어를 찾지 못한 경우 메시지 반환
+    }
+}
+
+public class week12 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("한영 단어 검색 프로그램입니다.");
+
+        while (true) {
+            System.out.print("한글 단어? ");
+            String input = scanner.nextLine();  // 사용자로부터 단어 입력받기
+
+            if (input.equals("그만")) {  // 입력이 "그만"이면 프로그램 종료
+                break;
+            }
+
+            // Dictionary 클래스의 kor2Eng 메서드를 이용해 영어 단어 출력
+            String result = Dictionary.kor2Eng(input);
+            System.out.println(input + "은(는) " + result);
+        }
+
+        scanner.close();  // 스캐너 종료
+    }
+}
+
+13번
+package s10_1;
+
+import java.util.Scanner;
+
+class Seat {
+    private String[] seats;  // 좌석 배열 (이름 저장)
+
+    public Seat(int num) {
+        seats = new String[num];  // 좌석 수만큼 배열 초기화
+        for (int i = 0; i < seats.length; i++) {
+            seats[i] = "---";  // 빈 좌석은 "---"로 표시
+        }
+    }
+
+    public void reserve(String name, int seatNumber) {
+        if (seatNumber < 1 || seatNumber > seats.length) {
+            System.out.println("잘못된 좌석 번호입니다.");
+        } else if (!seats[seatNumber - 1].equals("---")) {
+            System.out.println("이미 예약된 좌석입니다.");
+        } else {
+            seats[seatNumber - 1] = name;
+            System.out.println("예약되었습니다.");
+        }
+    }
+
+    public void showSeats() {
+        for (int i = 0; i < seats.length; i++) {
+            System.out.print(seats[i] + " ");
+        }
+        System.out.println();
+    }
+
+    public void cancel(String name) {
+        boolean found = false;
+        for (int i = 0; i < seats.length; i++) {
+            if (seats[i].equals(name)) {
+                seats[i] = "---";  // 좌석 취소
+                found = true;
+                System.out.println("취소되었습니다.");
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("예약된 이름이 없습니다.");
+        }
+    }
+}
+
+class ConcertReservation {
+    private Seat sSeat;
+    private Seat aSeat;
+    private Seat bSeat;
+
+    public ConcertReservation() {
+        sSeat = new Seat(10);  // S석 10개
+        aSeat = new Seat(10);  // A석 10개
+        bSeat = new Seat(10);  // B석 10개
+    }
+
+    public void reserveSeat() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("좌석구분 S(1), A(2), B(3): ");
+        int seatType = scanner.nextInt();
+        System.out.print("이름: ");
+        String name = scanner.next();
+        System.out.print("번호: ");
+        int seatNumber = scanner.nextInt();
+
+        switch (seatType) {
+            case 1:
+                sSeat.reserve(name, seatNumber);
+                break;
+            case 2:
+                aSeat.reserve(name, seatNumber);
+                break;
+            case 3:
+                bSeat.reserve(name, seatNumber);
+                break;
+            default:
+                System.out.println("잘못된 좌석 타입입니다.");
+                break;
+        }
+    }
+
+    public void showAllSeats() {
+        System.out.print("S석: ");
+        sSeat.showSeats();
+        System.out.print("A석: ");
+        aSeat.showSeats();
+        System.out.print("B석: ");
+        bSeat.showSeats();
+    }
+
+    public void cancelSeat() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("좌석구분 S(1), A(2), B(3): ");
+        int seatType = scanner.nextInt();
+        System.out.print("이름: ");
+        String name = scanner.next();
+
+        switch (seatType) {
+            case 1:
+                sSeat.cancel(name);
+                break;
+            case 2:
+                aSeat.cancel(name);
+                break;
+            case 3:
+                bSeat.cancel(name);
+                break;
+            default:
+                System.out.println("잘못된 좌석 타입입니다.");
+                break;
+        }
+    }
+
+    public void run() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("콘서트 예약 시스템입니다.");
+
+        while (true) {
+            System.out.println("\n예약:1, 조회:2, 취소:3, 끝내기:4 >> ");
+            int menu = scanner.nextInt();
+
+            switch (menu) {
+                case 1:
+                    reserveSeat();
+                    break;
+                case 2:
+                    showAllSeats();
+                    break;
+                case 3:
+                    cancelSeat();
+                    break;
+                case 4:
+                    System.out.println("프로그램을 종료합니다.");
+                    return;
+                default:
+                    System.out.println("잘못된 메뉴입니다.");
+                    break;
+            }
+        }
+    }
+}
+
+public class week13 {
+    public static void main(String[] args) {
+        ConcertReservation reservation = new ConcertReservation();
+        reservation.run();
+    }
+}
+
+14번
+package s10_1;
+
+class VArray {
+    private int[] array;  // 내부 배열
+    private int size;     // 현재 저장된 요소의 개수
+
+    public VArray(int capacity) {
+        array = new int[capacity];  // 초기 용량 설정
+        size = 0;  // 배열에 저장된 요소의 개수 초기화
+    }
+
+    // 배열의 크기(용량)를 반환
+    public int capacity() {
+        return array.length;
+    }
+
+    // 배열에 저장된 요소의 개수를 반환
+    public int size() {
+        return size;
+    }
+
+    // 배열에 원소 추가
+    public void add(int value) {
+        if (size >= array.length) {
+            resize();  // 배열 크기를 두 배로 늘림
+        }
+        array[size] = value;  // 배열의 끝에 추가
+        size++;
+    }
+
+    // 배열의 인덱스에 원소 삽입
+    public void insert(int index, int value) {
+        if (index < 0 || index > size) {
+            System.out.println("인덱스 범위가 잘못되었습니다.");
+            return;
+        }
+
+        if (size >= array.length) {
+            resize();  // 배열 크기를 두 배로 늘림
+        }
+
+        // 배열의 index 위치에 값을 삽입하기 위해 요소들을 뒤로 이동
+        for (int i = size; i > index; i--) {
+            array[i] = array[i - 1];
+        }
+        array[index] = value;
+        size++;
+    }
+
+    // 배열의 인덱스에서 원소 삭제
+    public void remove(int index) {
+        if (index < 0 || index >= size) {
+            System.out.println("잘못된 인덱스입니다.");
+            return;
+        }
+
+        // index 위치의 값을 삭제하고, 그 뒤의 값들을 앞으로 이동
+        for (int i = index; i < size - 1; i++) {
+            array[i] = array[i + 1];
+        }
+        size--;
+    }
+
+    // 모든 원소를 출력
+    public void printAll() {
+        for (int i = 0; i < size; i++) {
+            System.out.print(array[i] + " ");
+        }
+        System.out.println();
+    }
+
+    // 내부 배열 크기를 두 배로 늘리는 메서드
+    private void resize() {
+        int newCapacity = array.length * 2;
+        int[] newArray = new int[newCapacity];
+        // 기존 배열의 값을 새 배열에 복사
+        for (int i = 0; i < size; i++) {
+            newArray[i] = array[i];
+        }
+        array = newArray;  // 새 배열로 교체
+    }
+}
+
+public class week14 {
+    public static void main(String[] args) {
+        VArray v = new VArray(5);  // 5개의 정수를 저장하는 가변 배열 객체 생성
+        System.out.println("용량: " + v.capacity() + ", 저장된 개수: " + v.size());
+
+        // 7개 저장
+        for (int i = 0; i < 7; i++) {
+            v.add(i);  // 배열에 순서대로 정수 i 값 저장
+        }
+        System.out.println("용량: " + v.capacity() + ", 저장된 개수: " + v.size());
+        v.printAll();
+
+        // 배열의 인덱스 3에 100 삽입
+        v.insert(3, 100);
+        // 배열의 인덱스 5에 200 삽입
+        v.insert(5, 200);
+        System.out.println("용량: " + v.capacity() + ", 저장된 개수: " + v.size());
+        v.printAll();
+
+        // 배열의 인덱스 10의 정수 삭제
+        v.remove(10);
+        System.out.println("용량: " + v.capacity() + ", 저장된 개수: " + v.size());
+        v.printAll();
+
+        // 5개 저장
+        for (int i = 50; i < 55; i++) {
+            v.add(i);
+        }
+        System.out.println("용량: " + v.capacity() + ", 저장된 개수: " + v.size());
+        v.printAll();
+    }
+}
