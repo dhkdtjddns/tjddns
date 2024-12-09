@@ -1,0 +1,45 @@
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    Random random = new Random();
+    boolean playAgain = true;
+
+    // 첫 번째 while문: 게임 반복 여부 확인
+    while (playAgain) {
+        // 0에서 99까지 임의의 수 생성
+        int hiddenNumber = random.nextInt(100);
+        int guess = -1;  // 초기 추측값 설정
+        int attempts = 0;  // 시도 횟수
+
+        System.out.println("0에서 99까지의 임의의 수를 맞춰보세요!");
+
+        // 두 번째 while문: 숫자를 맞출 때까지 반복
+        while (guess != hiddenNumber) {
+            System.out.print("숫자를 입력하세요: ");
+            guess = scanner.nextInt();
+            attempts++;
+            
+
+            // 사용자가 입력한 숫자가 숨겨진 숫자보다 작은 경우
+            if (guess < hiddenNumber) {
+                System.out.println("더 높게");
+            }
+            // 사용자가 입력한 숫자가 숨겨진 숫자보다 큰 경우
+            else if (guess > hiddenNumber) {
+                System.out.println("더 낮게");
+            }
+            // 숫자를 맞춘 경우
+            else {
+                System.out.println("맞았습니다.");
+            }
+        }
+
+        // 게임을 다시 할지 여부 확인
+        System.out.print("다시하시겠습니까? (y/n)>>");
+        char response = scanner.next().toLowerCase().charAt(0);
+
+        // 사용자가 'n'을 입력하면 게임을 종료, 'y'이면 반복
+        if (response == 'n') {
+            playAgain = false;
+        }
+    }
+}
