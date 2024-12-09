@@ -1,0 +1,47 @@
+public static void main(String[] args) {
+int[][] array = new int[4][4]; // 4x4 크기의 2차원 배열 선언
+Random random = new Random(); // Random 객체 생성
+Scanner scanner = new Scanner(System.in);
+
+// 0~255 범위의 랜덤 정수 생성하여 배열에 저장
+for (int i = 0; i < array.length; i++) {
+    for (int j = 0; j < array[i].length; j++) {
+        array[i][j] = random.nextInt(256); // 0부터 255까지의 랜덤 정수 생성
+    }
+}
+
+// 초기 배열 출력
+System.out.println("초기 4x4 배열:");
+printArray(array);
+
+// 임계값 입력받기
+System.out.print("임계값을 입력하세요: ");
+int threshold = scanner.nextInt();
+
+// 배열 수정
+for (int i = 0; i < array.length; i++) {
+    for (int j = 0; j < array[i].length; j++) {
+        if (array[i][j] > threshold) {
+            array[i][j] = 225; // 임계값보다 크면 225로 설정
+        } else {
+            array[i][j] = 0;   // 임계값보다 작거나 같으면 0으로 설정
+        }
+    }
+}
+
+// 수정된 배열 출력
+System.out.println("수정된 4x4 배열:");
+printArray(array);
+
+scanner.close(); // Scanner 객체 닫기
+  }
+
+// 배열 출력 메소드
+public static void printArray(int[][] array) {
+for (int i = 0; i < array.length; i++) {
+    for (int j = 0; j < array[i].length; j++) {
+        System.out.print(array[i][j] + "\t"); // 탭으로 간격을 두고 출력
+    }
+    System.out.println(); // 각 행 출력 후 줄바꿈
+}
+}

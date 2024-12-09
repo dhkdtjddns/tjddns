@@ -1,0 +1,48 @@
+public static void main(String[] args) {
+    // 커피 이름과 가격 배열
+    String coffee[] = { "핫아메리카노", "아이스아메리카노", "카푸치노", "라떼" };
+    int price[] = { 3000, 3500, 4000, 5000 };
+    
+    Scanner scanner = new Scanner(System.in);
+    System.out.println("핫아메리카노, 아이스아메리카노, 카푸치노, 라떼 있습니다.");
+    
+    while (true) {
+        System.out.print("주문>> ");
+        String order = scanner.nextLine();
+        
+        if (order.equals("그만")) {
+            System.out.println("주문을 종료합니다.");
+            break; // "그만"을 입력하면 프로그램 종료
+        }
+        
+        String[] orderParts = order.split(" "); // 입력된 문자열을 공백으로 분리
+        if (orderParts.length != 2) {
+            System.out.println("잘못된 입력입니다. 메뉴와 수량을 입력하세요.");
+            continue;
+        }
+
+        String coffeeName = orderParts[0]; // 커피 이름
+        String quantityStr = orderParts[1]; // 잔 수 문자열
+        int quantity = 0;
+
+        // 잔 수가 숫자인지 확인
+        try {
+            quantity = Integer.parseInt(quantityStr);
+            if (quantity <= 0) {
+                System.out.println("잔 수는 양의 정수로 입력해주세요!");
+                continue;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("잔 수는 양의 정수로 입력해주세요!");
+            continue;
+        }
+
+        // 커피 이름이 메뉴에 있는지 확인
+        boolean found = false;
+        for (int i = 0; i < coffee.length; i++) {
+            if (coffeeName.equals(coffee[i])) {
+                int totalPrice = price[i] * quantity;
+                System.out.println("가격은 " + totalPrice + "원입니다.");
+                found = true;
+                break;
+            }
