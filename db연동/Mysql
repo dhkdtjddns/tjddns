@@ -1,0 +1,21 @@
+CREATE DATABASE footbail;
+-- 데이터베이스 사용 
+USE football;
+
+
+-- players 테이블 생성
+CREATE TABLE players (
+team VARCHAR(100),  --소속팀
+Jersey_number INT PRIMARY KEY, -- 등번호 (선수 고유 10로 사용)
+position VARCHAR(100), -- 포지션
+name VARCHAR(100), --선수이름
+weekly_salary DECIMAL(15, 2)-- 주급 (KRM, 한국 원화 기준)
+);
+
+-- 데이터 삽입 (실제 주급을 반영)
+INSERT INTO players (team, Jersey_number, position, name, weekly_salary)
+VALUES ('토트넘 홋스퍼', 7,'공격수', '손흥민', 558000000.00); --주급 약 5억 5천만 원
+INSERT INTO players (team, Jersey_number, position, name, weekly_salary)
+VALUES ('파리 생제르명', 19, '미드필더', 이강인', 30000000.00); -- 주급 약 3억 원
+21• INSERT INTO players (team, Jersey_number, position, name, weekly_salary)
+22 VALUES ('바이에른 뮌헨', 3, 수비수', '김민재', 320000000.00); --주급 약 3억 2천만 원
